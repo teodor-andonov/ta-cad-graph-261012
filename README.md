@@ -57,3 +57,7 @@ The code remains the source of truth. Graph structure is derived data. Future re
 ## License
 
 MIT; see LICENSE.
+
+## Deployment updates
+
+The GitHub Pages site is deployed by `.github/workflows/deploy.yml` on every push to `main`. Check [GitHub Actions](https://github.com/teodor-andonov/ta-cad-graph-261012/actions/workflows/deploy.yml) for the test and deployment results. On Android, folder selection may vary by browser; for initial validation, try the bundled example first.
