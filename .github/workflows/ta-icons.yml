@@ -1,0 +1,63 @@
+name: Generate TA app icons
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'branding/icon-source.svg'
+      - '.github/workflows/ta-icons.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  rasterize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install SVG renderer
+        run: pip install cairosvg pillow
+      - name: Render shared TA icons
+        shell: bash
+        env:
+          ICON_DIR: .
+          ICON_SUFFIX: 
+        run: |
+          python - <<'PY'
+          import os, re, io
+          from pathlib import Path
+          from PIL import Image
+          import cairosvg
+          source = Path('branding/icon-source.svg').read_text()
+          paths = ''.join(re.findall(r'<(?:rect|circle|line|path|polyline|polygon|ellipse)\b[^>]*?/>', source))
+          assert paths and 'viewBox="0 0 24 24"' in source, 'Missing canonical 24x24 Lucide glyph'
+          root = Path(os.environ['ICON_DIR'])
+          root.mkdir(parents=True, exist_ok=True)
+          suffix = os.environ['ICON_SUFFIX']
+          for maskable in (False, True):
+              scale = 0.54 if maskable else 0.60
+              factor = scale * 512 / 24
+              offset = (512 - scale * 512) / 2
+              bg = '<rect width="512" height="512" fill="#E6E6E6"/>' if maskable else '<rect width="512" height="512" rx="128" fill="#E6E6E6"/>'
+              svg = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">' + bg + f'<g transform="translate({offset} {offset}) scale({factor})" fill="none" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + paths + '</g></svg>\n'
+              (root / ('icon-maskable.svg' if maskable else 'icon.svg')).write_text(svg)
+              for size in (192,512):
+                  out = root / f'icon-{"maskable-" if maskable else ""}{size}{suffix}.png'
+                  raw = cairosvg.svg2png(bytestring=svg.encode(),output_width=size,output_height=size)
+                  img = Image.open(io.BytesIO(raw))
+                  img.save(out,optimize=True)
+                  assert img.size == (size,size)
+          PY
+      - name: Commit generated binary assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- './icon.svg' './icon-maskable.svg' './icon-192.png' './icon-512.png' './icon-maskable-192.png' './icon-maskable-512.png'
+          if ! git diff --cached --quiet; then
+            git commit -m "assets: render TA Lucide launcher PNGs"
+            git push origin HEAD:main
+          else
+            echo "Icons already up to date"
+          fi
