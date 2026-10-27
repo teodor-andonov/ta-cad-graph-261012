@@ -44,7 +44,7 @@ python -m unittest -v test_analyzer
 
 ## GitHub Pages deployment
 
-For [`teodor-andonov/ta-cad-graph-261012`](https://github.com/teodor-andonov/ta-cad-graph-261012), open **Settings → Pages → Build and deployment → Source → GitHub Actions**. The provided `.github/workflows/deploy.yml` deploys the static site automatically on pushes to `main`. The intended GitHub Pages address is `https://teodor-andonov.github.io/ta-cad-graph-261012/` (available after a successful deployment). HTTPS is necessary for the folder picker and installable PWA.
+For [`teodor-andonov/ta-cad-graph-261012`](https://github.com/teodor-andonov/ta-cad-graph-261012), open **Settings → Pages → Build and deployment → Source → GitHub Actions**. The `.github/workflows/deploy.yml` workflow publishes the static site **only when you manually run it** via **Actions → Publish CAD Graph → Run workflow**. Pushing to `main` does not publish. The intended GitHub Pages address is `https://teodor-andonov.github.io/ta-cad-graph-261012/` (available after a successful deployment). HTTPS is necessary for the folder picker and installable PWA.
 
 Private repositories may require plan-specific Pages permissions; a public repo is easiest. **Do not commit any private CAD source files**; use the app's folder picker locally instead.
 
@@ -60,4 +60,4 @@ MIT; see LICENSE.
 
 ## Deployment updates
 
-The GitHub Pages site is deployed by `.github/workflows/deploy.yml` on every push to `main`. Check [GitHub Actions](https://github.com/teodor-andonov/ta-cad-graph-261012/actions/workflows/deploy.yml) for the test and deployment results. On Android, folder selection may vary by browser; for initial validation, try the bundled example first.
+Releases are manual: use **Actions → Publish CAD Graph → Run workflow** to deploy the current `main` branch with `.github/workflows/deploy.yml`. Check [GitHub Actions](https://github.com/teodor-andonov/ta-cad-graph-261012/actions/workflows/deploy.yml) for the test and deployment results. On Android, folder selection may vary by browser; for initial validation, try the bundled example first.
