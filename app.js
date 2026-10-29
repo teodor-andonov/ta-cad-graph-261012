@@ -275,6 +275,4 @@ function setupInteractions(){
   window.addEventListener('keydown',e=>{if(e.key==='Escape'&&state.graph){state.selected=null;state.trace=false;$('inspectorEmpty').classList.remove('hidden');$('inspectorContent').classList.add('hidden');if(state.rank==='from_selected'){state.rank='depth';document.querySelector('[data-rank="depth"]').click();}else draw();}});
 }
 setupInteractions();
-if('serviceWorker'in navigator&&location.protocol.startsWith('http')){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn));
-}
+window.taPwaCanUpdate=()=>!document.getElementById('progress') || document.getElementById('progress').classList.contains('hidden');
