@@ -61,3 +61,9 @@ test('client retains user choice and uses an app-specific safety guard',()=>{
   assert.match(client,/controllerchange/);
   assert.doesNotMatch(client,/visibilityState[^\n]+location.reload/);
 });
+
+test('update controls cannot collide with application selectors',()=>{
+  const ids=[...client.matchAll(/id="([^"]+)"/g)].map(match=>match[1]);
+  assert.ok(ids.length>=8);
+  assert.ok(ids.every(id=>id.startsWith('ta-pwa-')));
+});
