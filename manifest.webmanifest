@@ -1,6 +1,7 @@
 {
-  "name": "CAD Graph — Python Dependency Explorer",
-  "short_name": "CAD Graph",
+  "id": "/ta-cad-graph-261012/",
+  "name": "TaCodegraph",
+  "short_name": "TaCodegraph",
   "description": "Local, visual analysis of dependencies in Python CAD projects.",
   "start_url": "./",
   "scope": "./",
