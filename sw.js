@@ -1,4 +1,4 @@
-const CACHE='cad-graph-shell-v2-ta-icons-ta-names-2-ta-update-v4';;
+const CACHE='cad-graph-shell-v2-ta-icons-ta-names-2-ta-update-v5';;
 const STATIC=['./pwa-update.js','./','./index.html','./style.css','./app.js','./worker.js','./analyzer.py','./manifest.webmanifest','./icon.svg','./icon.svg?v=ta-20261027','./icon-192.png','./icon-512.png','./icon-maskable-192.png','./icon-maskable-512.png','./examples/parameters.py','./examples/geometry.py'];
 const PYODIDE_HOST='cdn.jsdelivr.net';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));});

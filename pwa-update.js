@@ -6,7 +6,7 @@
   const base = new URL('./', script.src);
   const appName = document.querySelector('meta[name="application-name"]')?.content || document.title;
   const icon = document.querySelector('link[rel="icon"]')?.href;
-  let registration, prepared = false, reloading = false, checking = false;
+  let registration, prepared = false, reloading = false, checking = false, manualCheck = false;
   let hadController = Boolean(navigator.serviceWorker.controller);
   let previousFocus, prepareTimeout;
   const host = document.createElement('div');
@@ -62,9 +62,9 @@
     });
   };
   const check = async (manual = false) => {
+    if (manual) { manualCheck = true; show('Checking for updates…'); }
     if (!registration || checking || prepared) return;
     checking = true;
-    if (manual) show('Checking for updates…');
     try {
       await registration.update();
       const worker = registration.installing;
@@ -74,9 +74,9 @@
         }));
       }
       if (registration.waiting) offer();
-      else if (manual) show('You’re up to date.');
-    } catch { if (manual) show('Could not check for updates. Connect to the internet and try again.'); }
-    finally { checking = false; }
+      else if (manualCheck) show('You’re up to date.');
+    } catch { if (manualCheck) show('Could not check for updates. Connect to the internet and try again.'); }
+    finally { checking = false; manualCheck = false; }
   };
   get('toggle').onclick = () => {
     previousFocus = document.activeElement;
